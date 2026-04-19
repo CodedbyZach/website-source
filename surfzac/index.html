@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title></title>
+  <link id="favicon32" rel="icon" type="image/png" sizes="32x32" href="">
+  <link id="appleTouchIcon" rel="apple-touch-icon" href="">
+  <style>
+    :root{
+      --bg:#1e1e1e;
+      --bg2:#151515;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.10);
+      --stroke: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --muted2: rgba(255,255,255,.55);
+      --accent: #7c5cff;
+      --accent2:#2dd4bf;
+      --good:#22c55e;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 22px;
+      --max: 70rem;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"
+    }
+
+    @layer reset {
+      html, body, div, span, applet, object, iframe,
+      h1, h2, h3, h4, h5, h6, blockquote, pre,
+      a, abbr, acronym, address, big, cite, code,
+      del, dfn, em, img, ins, kbd, q, s, samp,
+      small, strike, sub, sup, tt, var,
+      b, u, i, center,
+      dl, dt, dd, nav ul, nav li, form, label,
+      article, aside, canvas, embed,
+      figure, figcaption, footer, header, hgroup,
+      menu, nav, output, ruby, section,
+      time, mark, audio, video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline
+      }
+
+      article, aside, details, figcaption, figure,
+      footer, header, hgroup, menu, nav, section {
+        display: block
+      }
+
+      body {
+        line-height: 1
+      }
+
+      nav ul {
+        list-style: none
+      }
+
+      blockquote, q {
+        quotes: none
+      }
+
+      blockquote:before, blockquote:after,
+      q:before, q:after {
+        content: '';
+        content: none
+      }
+
+      table {
+        border-collapse: collapse;
+        border-spacing: 0
+      }
+    }
+
+    *{
+      box-sizing:border-box
+    }
+
+    body{
+      min-block-size:100svb;
+      font-family: var(--sans);
+      color: var(--text);
+      background: linear-gradient(180deg, var(--bg), var(--bg2)) fixed;
+      overflow-x:hidden
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px
+    }
+
+    .wrap{
+      max-inline-size: var(--max);
+      margin-inline: auto;
+      padding: 26px 18px 44px
+    }
+
+    .top{
+      padding: 10px 6px 22px
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      user-select:none
+    }
+
+    .brand h1{
+      font-size: .875rem;
+      letter-spacing:.2px;
+      margin:0;
+      line-height: 1.1
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 1.12rem;
+      margin-top: .5em
+    }
+
+    .panel{
+      border-radius: var(--radius2);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative
+    }
+
+    .panel:before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      pointer-events:none
+    }
+
+    .panel > *{
+      position:relative;
+    }
+
+    .heroMain{
+      padding: 1.625em 1.375em 1.375em;
+    }
+
+    .heroTitle{
+      margin: .875rem 0 .625rem;
+      font-size: clamp(1.75rem, 1.3690rem + 1.5238vw, 2.75rem);
+      letter-spacing: -.02em;
+      line-height: 1.06
+    }
+
+    .heroSub{
+      margin:0;
+      max-inline-size: 62ch;
+      color: var(--muted);
+      font-size: 14.5px;
+      line-height: 1.55;
+      font-weight: 400
+    }
+
+    .heroSub strong{
+      font-weight: 700;
+      color: var(--text)
+    }
+
+    .heroSide{
+      padding: 1.11em;
+      display:flex;
+      flex-direction:column;
+      gap: .75rem
+    }
+
+    .seg{
+      display:flex;
+      background: hsl(0 0% 100% / .04);
+      border: 1px solid var(--stroke);
+      border-radius: calc(infinity * 1px);
+      padding: .375em;
+      gap: .375em
+    }
+
+    .seg button{
+      flex:1;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: .62em .75em;
+      border-radius: calc(infinity * 1px);
+      cursor:pointer;
+      font-weight: 650;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: .5rem;
+      transition:
+        transform .08s ease,
+        background .18s ease,
+        color .18s ease
+    }
+
+    .seg button:hover {
+      transform: translateY(-1px);
+    }
+
+    .seg button[aria-selected="true"] {
+      color: var(--text);
+      background:
+        radial-gradient(140px 70px at 30% 20%, hsl(0 0% 100% / .18), #0000 55%),
+        linear-gradient(135deg, rgb(124 92 255 / .55), rgb(45 212 191 / .25));
+      border: 1px solid hsl(0 0% 100% / .14)
+    }
+
+    .dlCard{
+      border-radius: var(--radius);
+      border: 1px solid var(--stroke);
+      background: hsl(0 0% 100% / .05);
+      padding: .875em;
+      display:flex;
+      flex-direction:column;
+      gap:.625rem
+    }
+
+    .dlMeta{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px
+    }
+
+    .dlMeta h2{
+      font-size: .875rem;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing:.3px;
+      text-transform: uppercase
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: .5em .625em;
+      border-radius: calc(infinity * 1px);
+      border: 1px solid var(--stroke);
+      background: hsl(0 0% 100% / .04);
+      font-size: .75rem;
+      color: var(--muted);
+      white-space:nowrap
+    }
+
+    .dlName{
+      margin:0;
+      font-size: 1.11rem;
+      letter-spacing:-.01em;
+      line-height: 1.2
+    }
+
+    .dlDesc{
+      margin:0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.45
+    }
+
+    .btnRow {
+      display:flex;
+      gap:.625rem;
+      flex-wrap:wrap;
+      margin-top: .375rem
+    }
+
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: .75em .875em;
+      border-radius: .875rem;
+      border: 1px solid hsl(0 0% 100% / .16);
+      cursor:pointer;
+      font-weight: 800;
+      letter-spacing:.2px;
+      transition:
+        transform .08s ease,
+        filter .18s ease,
+        background .18s ease;
+      user-select:none
+    }
+
+    .btnPrimary {
+      flex: 1;
+      min-inline-size: 13.75rem;
+      color: #0b1220;
+      background:
+        radial-gradient(240px 90px at 20% 20%, hsl(0 0% 100% / .75), #0000 55%),
+        linear-gradient(135deg, rgb(124 92 255), rgb(45 212 191 / .95));
+      box-shadow: 0 18px 45px rgb(124 92 255 / .18)
+    }
+
+    .btnSecondary {
+      color: var(--text);
+      background: hsl(0 0% 100% / .05);
+      border-color: var(--stroke);
+      flex: 0
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03)
+    }
+
+    .btn:active {
+      transform: translateY(0px);
+      filter: brightness(.98)
+    }
+
+    .infoGrid {
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.125rem;
+      margin-top: .25rem
+    }
+
+    .kv {
+      border-radius: .875rem;
+      border: 1px solid var(--stroke);
+      background: hsl(0 0% 100% / .04);
+      padding: .625em .75em
+    }
+
+    .kv .k {
+      font-size: 11px;
+      color: var(--muted2);
+      letter-spacing:.24px;
+      text-transform: uppercase;
+    }
+
+    .kv .v {
+      margin-top: .25rem;
+      font-size: .81rem;
+      color: var(--text);
+      font-family: var(--mono);
+      overflow-wrap:anywhere
+    }
+
+    .below {
+      margin-top: 1.125rem;
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: .875rem
+    }
+
+    .tile {
+      padding: 1em;
+      border-radius: var(--radius);
+      border: 1px solid var(--stroke);
+      background: hsl(0 0% 100% / .04)
+    }
+
+    .tile h3 {
+      margin: 0 0 .5rem;
+      font-size: .875rem;
+      letter-spacing:.2px
+    }
+
+    .tile p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.5
+    }
+
+    .foot{
+      margin-top: 1.125rem;
+      display:flex;
+      gap:.75rem;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      padding: .875rem .375rem 0;
+      color: var(--muted2);
+      font-size: .78rem;
+      border-top: 1px solid var(--stroke)
+    }
+
+    .logoImg{
+      width: 2rem;
+      aspect-ratio:1;
+    }
+
+    html, body {
+      scrollbar-width: none;
+      -ms-overflow-style: none
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none
+    }
+
+    .seg button.disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      pointer-events: none;
+      filter: grayscale(1)
+    }
+
+    .btn.disabled,
+    .btn[disabled] {
+      opacity: .45;
+      cursor: not-allowed;
+      pointer-events: none;
+      filter: grayscale(1);
+      box-shadow: none
+    }
+
+    a.disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      pointer-events: none;
+      filter: grayscale(1);
+      text-decoration: none
+    }
+
+    .warn{
+      font-weight: bold
+    }
+
+    @media (prefers-color-scheme: light){
+      .btnPrimary{
+        color: #070b14
+      }
+    }
+
+    @media (max-width: 57.5rem){
+      .hero{
+        grid-template-columns: 1fr
+      }
+    }
+
+    @media (max-width: 57.5rem){
+      .below{
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <img class="logoImg" id="brandLogo" src="" alt="">
+        <div>
+          <h1 id="brandName"></h1>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="download">
+        <div class="panel heroMain">
+          <h2 class="heroTitle" id="heroTitle"></h2>
+          <p class="heroSub" id="heroSub"></p>
+        </div>
+
+        <aside class="panel heroSide" aria-label="Download selector">
+          <div class="seg" role="tablist" aria-label="Platform">
+            <button type="button" role="tab" aria-selected="false" id="tab-windows" data-os="windows">
+              <span id="label-windows"></span>
+            </button>
+            <button type="button" role="tab" aria-selected="false" id="tab-linux" data-os="linux">
+              <span id="label-linux"></span>
+            </button>
+            <button type="button" role="tab" aria-selected="false" id="tab-android" data-os="android">
+              <span id="label-android"></span>
+            </button>
+          </div>
+
+          <div class="seg" role="tablist" aria-label="Build type">
+            <button type="button" role="tab" aria-selected="false" id="type-install" data-type="install">
+              <span id="label-install"></span>
+            </button>
+            <button type="button" role="tab" aria-selected="false" id="type-portable" data-type="portable">
+              <span id="label-portable"></span>
+            </button>
+          </div>
+
+          <div class="dlCard" aria-live="polite">
+            <div class="dlMeta">
+              <h2 id="dlHeading"></h2>
+              <span class="badge" id="dlBadge"></span>
+            </div>
+
+            <p class="dlName" id="dlName"></p>
+            <p class="dlDesc" id="dlDesc"></p>
+
+            <div class="btnRow">
+              <a class="btn btnPrimary" id="dlPrimary">
+                <span id="dlPrimaryText"></span>
+              </a>
+              <a class="btn btnSecondary" id="dlMirror">Mirror</a>
+            </div>
+
+            <div class="infoGrid" id="checksums">
+              <div class="kv">
+                <div class="k">File</div>
+                <div class="v" id="dlFile"></div>
+              </div>
+              <div class="kv">
+                <div class="k">Size</div>
+                <div class="v" id="dlSize"></div>
+              </div>
+              <div class="kv" style="grid-column: 1 / -1;">
+                <div class="k">SHA-256</div>
+                <div class="v" id="dlSha"></div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="below">
+        <div class="tile" id="notes">
+          <h3 id="notesTitle"></h3>
+          <p>
+            <span id="notesBody"></span>
+            <br><br>
+            <a id="releaseNotesLink"></a>
+          </p>
+        </div>
+
+        <div class="tile" id="support">
+          <h3 id="supportTitle"></h3>
+          <p>
+            <span id="supportBody"></span>
+            <br><br>
+            <a id="supportLink"></a>
+          </p>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <div><span id="footerBrand"></span> <span id="year"></span></div>
+        <div id="footerLinks"></div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const CONFIG = {
+      page: {
+        title: "Download SurfZac",
+        favicon: "https://raw.githubusercontent.com/CodedbyZach/surf-zac/refs/heads/release/SurfZacIcon.png",
+        appleTouchIcon: "https://raw.githubusercontent.com/CodedbyZach/surf-zac/refs/heads/release/SurfZacIcon.png"
+      },
+
+      brand: {
+        name: "SurfZac Browser",
+        logo: "https://raw.githubusercontent.com/CodedbyZach/surf-zac/refs/heads/release/SurfZacIcon.png",
+        logoAlt: "SurfZac Logo"
+      },
+
+      hero: {
+        title: "Download SurfZac",
+        sub: `Choose your platform.`
+      },
+
+      selector: {
+        heading: "Latest",
+        platforms: {
+          windows: {
+            label: "Windows",
+            enabled: true
+          },
+          linux: {
+            label: "Linux",
+            enabled: true
+          },
+          android: {
+            label: "Android",
+            enabled: false
+          }
+        },
+        buildTypes: {
+          install: "Installable",
+          portable: "Portable"
+        }
+      },
+
+      notes: {
+        title: "Release notes",
+        body: "Release notes are located below.",
+        linkText: "View latest notes",
+        href: "https://github.com/CodedbyZach/surf-zac/commits/26.04.0"
+      },
+
+      support: {
+        title: "Need help?",
+        body: "Join the discord!",
+        linkText: "Discord",
+        href: "https://discord.com/invite/NsezGxKMnA"
+      },
+
+      footer: {
+        brand: "Coded by Zach&trade;",
+        year: "2026",
+        links: [
+          { text: "Privacy", href: "https://codedbyzach.com/surfzac/privacy_policy.html" },
+          { text: "Terms", href: "https://codedbyzach.com/surfzac/terms_of_service.html" },
+          { text: "Source", href: "https://github.com/CodedbyZach/surf-zac" }
+        ]
+      },
+
+      defaults: {
+        os: "windows",
+        type: "install"
+      },
+
+      builds: {
+        windows: {
+          install: {
+            badge: "v26.04.0",
+            name: "SurfZac for Windows",
+            desc: "Installer for Windows",
+            primaryText: "Download Installer",
+            file: "SurfZacSetup.exe",
+            size: "Unknown",
+            sha256: "Unknown",
+            url: "https://github.com/CodedbyZach/surf-zac/releases/download/26.04.0/SurfZacSetup.exe",
+            mirrorUrl: "https://github.com/CodedbyZach/surf-zac/releases/download/26.04.0/SurfZacSetup.exe"
+          },
+          portable: {
+            badge: "v26.04.0",
+            name: "SurfZac for Windows",
+            desc: "Portable ZIP file.",
+            primaryText: "Download Portable",
+            file: "SurfZacWinPortable.zip",
+            size: "Unknown",
+            sha256: "Unknown",
+            url: "https://github.com/CodedbyZach/surf-zac/releases/download/26.04.0/SurfZacWinPortable.zip",
+            mirrorUrl: "https://github.com/CodedbyZach/surf-zac/releases/download/26.04.0/SurfZacWinPortable.zip"
+          }
+        },
+
+        linux: {
+          install: {
+            badge: "v26.03.1",
+            name: "SurfZac for Linux",
+            desc: "Installer for Debian-based Linux versions.",
+            primaryText: "Download .deb",
+            file: "SurfZac-x86_64.deb",
+            size: "334.3 MB",
+            sha256: "4AD6B9AE088AE5BE862652493D3DE6454D36BB230918AE12AA32A2E8DF08B227",
+            url: "https://github.com/CodedbyZach/surf-zac/releases/download/26.04.0/surfzac-x86_64.deb",
+            mirrorUrl: "https://github.com/CodedbyZach/surf-zac/releases/download/26.04.0/surfzac-x86_64.deb"
+          },
+          portable: {
+            badge: "v26.03.1",
+            name: "SurfZac for Linux",
+            desc: `Portable Linux AppImage build. <span class="warn">Not recommended for use.</span> Use the Debian file instead.`,
+            primaryText: "Download .AppImage",
+            file: "SurfZac-x86_64.AppImage",
+            size: "459.8 MB",
+            sha256: "29FEA37542F38A726C7E2E5611D96EE99CAB6A32BCBA3BC092EA7FAAF465397F",
+            url: "https://github.com/CodedbyZach/surf-zac/releases/download/26.04.0/SurfZac-x86_64.AppImage",
+            mirrorUrl: "https://github.com/CodedbyZach/surf-zac/releases/download/26.04.0/SurfZac-x86_64.AppImage"
+          }
+        },
+
+        android: {
+          install: {
+            badge: "v0.0.0",
+            name: "SurfZac for Android",
+            desc: "APK build",
+            primaryText: "Download APK",
+            file: "Unknown",
+            size: "Unknown",
+            sha256: "Unknown",
+            url: "javascript:void(0)",
+            mirrorUrl: "javascript:void(0)"
+          },
+          portable: {
+            badge: "v0.0.0",
+            name: "SurfZac for Android",
+            desc: "Nothing yet",
+            primaryText: "Download APK",
+            file: "Unknown",
+            size: "Unknown",
+            sha256: "Unknown",
+            url: "javascript:void(0)",
+            mirrorUrl: "javascript:void(0)"
+          }
+        }
+      }
+    };
+
+    const els = {
+      favicon32: document.getElementById("favicon32"),
+      appleTouchIcon: document.getElementById("appleTouchIcon"),
+      brandLogo: document.getElementById("brandLogo"),
+      brandName: document.getElementById("brandName"),
+      heroTitle: document.getElementById("heroTitle"),
+      heroSub: document.getElementById("heroSub"),
+
+      tabs: Array.from(document.querySelectorAll("[data-os]")),
+      typeTabs: Array.from(document.querySelectorAll("[data-type]")),
+
+      platformLabels: {
+        windows: document.getElementById("label-windows"),
+        linux: document.getElementById("label-linux"),
+        android: document.getElementById("label-android")
+      },
+
+      buildTypeLabels: {
+        install: document.getElementById("label-install"),
+        portable: document.getElementById("label-portable")
+      },
+
+      heading: document.getElementById("dlHeading"),
+      badge: document.getElementById("dlBadge"),
+      name: document.getElementById("dlName"),
+      desc: document.getElementById("dlDesc"),
+      primary: document.getElementById("dlPrimary"),
+      primaryText: document.getElementById("dlPrimaryText"),
+      mirror: document.getElementById("dlMirror"),
+      file: document.getElementById("dlFile"),
+      size: document.getElementById("dlSize"),
+      sha: document.getElementById("dlSha"),
+
+      notesTitle: document.getElementById("notesTitle"),
+      notesBody: document.getElementById("notesBody"),
+      releaseNotesLink: document.getElementById("releaseNotesLink"),
+
+      supportTitle: document.getElementById("supportTitle"),
+      supportBody: document.getElementById("supportBody"),
+      supportLink: document.getElementById("supportLink"),
+
+      footerBrand: document.getElementById("footerBrand"),
+      year: document.getElementById("year"),
+      footerLinks: document.getElementById("footerLinks")
+    };
+
+    let currentOS = CONFIG.defaults.os;
+    let currentType = CONFIG.defaults.type;
+
+    function setLinkState(el, href, enabled, text = null) {
+      if (text !== null) el.textContent = text;
+
+      if (enabled) {
+        el.href = href;
+        el.classList.remove("disabled");
+        el.removeAttribute("aria-disabled");
+        el.removeAttribute("tabindex");
+      } else {
+        el.removeAttribute("href");
+        el.classList.add("disabled");
+        el.setAttribute("aria-disabled", "true");
+        el.setAttribute("tabindex", "-1");
+      }
+    }
+
+    function renderStaticContent() {
+      document.title = CONFIG.page.title;
+      els.favicon32.href = CONFIG.page.favicon;
+      els.appleTouchIcon.href = CONFIG.page.appleTouchIcon;
+
+      els.brandLogo.src = CONFIG.brand.logo;
+      els.brandLogo.alt = CONFIG.brand.logoAlt;
+      els.brandName.textContent = CONFIG.brand.name;
+
+      els.heroTitle.textContent = CONFIG.hero.title;
+      els.heroSub.innerHTML = CONFIG.hero.sub;
+
+      Object.entries(CONFIG.selector.platforms).forEach(([key, value]) => {
+        els.platformLabels[key].textContent = value.label;
+
+        const btn = document.getElementById(`tab-${key}`);
+        btn.classList.toggle("disabled", !value.enabled);
+        btn.disabled = !value.enabled;
+      });
+
+      els.buildTypeLabels.install.textContent = CONFIG.selector.buildTypes.install;
+      els.buildTypeLabels.portable.textContent = CONFIG.selector.buildTypes.portable;
+
+      els.heading.textContent = CONFIG.selector.heading;
+
+      els.notesTitle.textContent = CONFIG.notes.title;
+      els.notesBody.innerHTML = CONFIG.notes.body;
+
+      const notesEnabled = CONFIG.notes.href && CONFIG.notes.href !== "javascript:void(0)";
+      setLinkState(els.releaseNotesLink, CONFIG.notes.href, notesEnabled, CONFIG.notes.linkText);
+
+      els.supportTitle.textContent = CONFIG.support.title;
+      els.supportBody.innerHTML = CONFIG.support.body;
+      setLinkState(els.supportLink, CONFIG.support.href, true, CONFIG.support.linkText);
+
+      els.footerBrand.innerHTML  = CONFIG.footer.brand;
+      els.year.textContent = CONFIG.footer.year;
+      els.footerLinks.innerHTML = CONFIG.footer.links
+        .map(link => `<a href="${link.href}">${link.text}</a>`)
+        .join(" &middot; ");
+    }
+
+    function getSafeOS() {
+      if (CONFIG.selector.platforms[currentOS]?.enabled) return currentOS;
+      const firstEnabled = Object.keys(CONFIG.selector.platforms).find(
+        key => CONFIG.selector.platforms[key].enabled
+      );
+      return firstEnabled || "windows";
+    }
+
+    function setOS(os) {
+      if (!CONFIG.selector.platforms[os]?.enabled) return;
+
+      currentOS = os;
+      const build = CONFIG.builds[currentOS][currentType];
+
+      els.tabs.forEach(tab => {
+        tab.setAttribute("aria-selected", String(tab.dataset.os === currentOS));
+      });
+
+      els.typeTabs.forEach(tab => {
+        tab.setAttribute("aria-selected", String(tab.dataset.type === currentType));
+      });
+
+      els.badge.textContent = build.badge;
+      els.name.textContent = build.name;
+      els.desc.innerHTML = build.desc;
+      els.primaryText.textContent = build.primaryText;
+      els.file.textContent = build.file;
+      els.size.textContent = build.size;
+      els.sha.textContent = build.sha256;
+
+      const primaryEnabled = build.url && build.url !== "javascript:void(0)";
+      const mirrorHref = build.mirrorUrl || build.url;
+      const mirrorEnabled = mirrorHref && mirrorHref !== "javascript:void(0)";
+
+      setLinkState(els.primary, build.url, primaryEnabled);
+      setLinkState(els.mirror, mirrorHref, mirrorEnabled, "Mirror");
+    }
+
+    els.typeTabs.forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentType = btn.dataset.type;
+        setOS(currentOS);
+      });
+    });
+
+    els.tabs.forEach(btn => {
+      btn.addEventListener("click", () => {
+        setOS(btn.dataset.os);
+      });
+    });
+
+    renderStaticContent();
+    currentOS = getSafeOS();
+    setOS(currentOS);
+  </script>
+</body>
+</html>
